@@ -79,4 +79,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial check
     animateSkills();
     revealOnScroll();
+
+    // Visitor Counter Logic
+    const viewCountEl = document.getElementById('view-count');
+    const updateVisitorCount = async () => {
+        try {
+            // Using counterapi.dev - Replace 'bhanuka-portfolio' with a unique namespace if needed
+            const response = await fetch('https://api.counterapi.dev/v1/bhanuka-portfolio/visits/up');
+            const data = await response.json();
+
+            if (data && data.count) {
+                // Animate count up
+                let start = 0;
+                const end = data.count;
+                const duration = 2000;
+                const increment = end / (duration / 16);
+
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= end) {
+                        viewCountEl.innerText = end.toString().padStart(4, '0');
+                        clearInterval(timer);
+                    } else {
+                        viewCountEl.innerText = Math.floor(start).toString().padStart(4, '0');
+                    }
+                }, 16);
+            }
+        } catch (error) {
+            console.error('Error fetching visitor count:', error);
+            viewCountEl.innerText = '----';
+        }
+    };
+
+    updateVisitorCount();
 });
