@@ -112,4 +112,49 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     updateVisitorCount();
+
+    // Mood Switcher Logic
+    const moodToggle = document.getElementById('mood-toggle');
+    const moodOptions = document.querySelectorAll('.mood-option');
+    const heroTitle = document.querySelector('.hero-content h2');
+    const heroDesc = document.querySelector('.hero-content p');
+    const aboutTitle = document.querySelector('.about h3');
+    const aboutDesc = document.querySelector('.about p');
+    const body = document.body;
+
+    const setMood = (mood) => {
+        if (mood === 'design') {
+            body.classList.add('design-mode');
+            if (heroTitle) heroTitle.innerText = 'Creative Graphic Designer';
+            if (heroDesc) heroDesc.innerHTML = 'Fusing aesthetics with functionality to create visual identities that resonate and digital experiences that inspire. I blend artistic intuition with technical precision to build memorable brands.';
+            if (aboutTitle) aboutTitle.innerText = 'Creative Graphic Designer';
+            if (aboutDesc) aboutDesc.innerText = 'I am a passionate Graphic Designer with a focus on branding, UI/UX, and digital illustration. My approach combines creative storytelling with modern design principles to deliver impactful visual solutions that connect brands with their audience.';
+            moodOptions.forEach(opt => opt.classList.remove('active'));
+            const designOpt = document.querySelector('.mood-option.design');
+            if (designOpt) designOpt.classList.add('active');
+        } else {
+            body.classList.remove('design-mode');
+            if (heroTitle) heroTitle.innerText = 'Full-stack Web Developer';
+            if (heroDesc) heroDesc.innerHTML = 'I’m a Full Stack Developer who loves turning ideas into fully functional digital experiences. From clean and responsive front-end interfaces to powerful back-end systems and databases.';
+            if (aboutTitle) aboutTitle.innerText = 'Full-stack Web Developer';
+            if (aboutDesc) aboutDesc.innerText = 'I am a passionate Full-stack Web Developer with a strong foundation in building modern, responsive applications. My journey in tech is driven by a desire to solve complex problems through clean code and intuitive design.';
+            moodOptions.forEach(opt => opt.classList.remove('active'));
+            const devOpt = document.querySelector('.mood-option.dev');
+            if (devOpt) devOpt.classList.add('active');
+        }
+        localStorage.setItem('portfolio-mood', mood);
+    };
+
+    if (moodToggle) {
+        moodToggle.addEventListener('click', () => {
+            const isDesign = body.classList.contains('design-mode');
+            setMood(isDesign ? 'dev' : 'design');
+        });
+    }
+
+    // Check for saved mood
+    const savedMood = localStorage.getItem('portfolio-mood');
+    if (savedMood) {
+        setMood(savedMood);
+    }
 });
